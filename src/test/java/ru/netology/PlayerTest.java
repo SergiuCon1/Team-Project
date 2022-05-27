@@ -20,4 +20,46 @@ public class PlayerTest {
     }
 
     // другие ваши тесты
+
+
+    @Test
+    public void shouldSumGenreTwoGames() {
+        GameStore store = new GameStore();
+        Game game = store.publishGame("GTA", "action");
+        Game game1 = store.publishGame("GTA Vice City", "action");
+        Game game2 = store.publishGame("NFS", "Гонки");
+
+        Player player = new Player("Max");
+        player.installGame(game);
+        player.installGame(game1);
+        player.installGame(game2);
+        player.play(game, 5);
+        player.play(game1, 4);
+        player.play(game2, 3);
+
+        int expected = 9;
+        int actual = player.sumGenre("action");
+        assertEquals(expected, actual);
+    }
+
+
+    @Test
+    public void shouldMostTimePlayerToGenre() {
+        GameStore store = new GameStore();
+        Game game = store.publishGame("GTA", "action");
+        Game game1 = store.publishGame("GTA Vice City", "action");
+        Game game2 = store.publishGame("NFS", "Гонки");
+
+        Player player = new Player("Max");
+        player.installGame(game);
+        player.installGame(game1);
+        player.installGame(game2);
+        player.play(game, 5);
+        player.play(game1, 4);
+        player.play(game2, 3);
+
+        String expected = game.getTitle();
+        Game actual = player.mostPlayerByGenre("action");
+        assertEquals(expected, actual);
+    }
 }
