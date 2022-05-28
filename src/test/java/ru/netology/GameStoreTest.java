@@ -63,6 +63,22 @@ public class GameStoreTest {
     }
 
     @Test
+    public void shouldGetBestPlayerTestWhenBothPlayersDidNotPlayed() {
+        GameStore store = new GameStore();
+        Game game = store.publishGame("Нетология Баттл Онлайн", "Аркады");
+
+        Player playerOne = new Player("Petya");
+        Player playerTwo = new Player("Vasya");
+        playerOne.installGame(game);
+        playerTwo.installGame(game);
+
+        String expected = null;
+        String actual = store.getMostPlayer();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     public void shouldGetNullWhenPlayersNotFound() {
         GameStore store = new GameStore();
         Game game = store.publishGame("Нетология Баттл Онлайн", "Аркады");
@@ -92,6 +108,25 @@ public class GameStoreTest {
         playerTwo.play(gameTwo, 2);
 
         int expected = 13;
+        int actual = store.getSumPlayedTime();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldSumTimeOfAllPlayersWhenBothPlayersDidNotPlay() {
+        GameStore store = new GameStore();
+        Game game = store.publishGame("Нетология Баттл Онлайн", "Аркады");
+        Game gameTwo = store.publishGame("Нетология Баттл Онлайн.Второй версии", "Приключения");
+
+        Player playerOne = new Player("Petya");
+        Player playerTwo = new Player("Vasya");
+        playerOne.installGame(game);
+        playerTwo.installGame(game);
+        playerOne.installGame(gameTwo);
+        playerTwo.installGame(gameTwo);
+
+        int expected = 0;
         int actual = store.getSumPlayedTime();
 
         assertEquals(expected, actual);
