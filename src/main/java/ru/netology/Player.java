@@ -45,8 +45,6 @@ public class Player {
         game.getStore().addPlayTime(name, hours);
         if (playedTimeGame.containsKey(game)) {
             playedTimeGame.put(game, playedTimeGame.get(game) + hours);
-        } else {
-            playedTimeGame.put(game, hours);
         }
         return playedTimeGame.get(game);
     }
