@@ -1,7 +1,9 @@
 package ru.netology;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.Test;
+import ru.netology.repository.NotInstallGameException;
 
 public class PlayerTest {
 
@@ -106,10 +108,9 @@ public class PlayerTest {
 
         Player player = new Player("Petya");
         //player.installGame(game);
-        player.play(game, 3);
 
-        int expected = 3;
-        int actual = player.sumGenre(game.getGenre());
-        assertEquals(expected, actual);
+        assertThrows(NotInstallGameException.class, () -> {
+            player.play(game, 3);
+        });
     }
 }

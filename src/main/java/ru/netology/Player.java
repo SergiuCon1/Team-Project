@@ -1,5 +1,7 @@
 package ru.netology;
 
+import ru.netology.repository.NotInstallGameException;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,6 +39,9 @@ public class Player {
      * если игра не была установлена, то надо выкидывать RuntimeException
      */
     public int play(Game game, int hours) {
+        if (playedTimeGame.get(game) == null) {
+            throw new NotInstallGameException("This " + game + " wasn't install");
+        }
         game.getStore().addPlayTime(name, hours);
         if (playedTimeGame.containsKey(game)) {
             playedTimeGame.put(game, playedTimeGame.get(game) + hours);
