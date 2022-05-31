@@ -1,15 +1,19 @@
 package ru.netology;
 
+import ru.netology.repository.NotInstallGameException;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class Player {
     private String name;
 
-    /** информация о том, в какую игру сколько часов было сыграно
-    ключ - игра
-    значение - суммарное количество часов игры в эту игру */
-    private Map<Game, Integer> playedTime = new HashMap<>();
+    /**
+     * информация о том, в какую игру сколько часов было сыграно
+     * ключ - игра
+     * значение - суммарное количество часов игры в эту игру
+     */
+    private Map<Game, Integer> playedTimeGame = new HashMap<>();
 
     public Player(String name) {
         this.name = name;
@@ -19,44 +23,64 @@ public class Player {
         return name;
     }
 
-    /** добавление игры игроку
-    если игра уже была, никаких изменений происходить не должно */
+    /**
+     * добавление игры игроку
+     * если игра уже была, никаких изменений происходить не должно
+     */
     public void installGame(Game game) {
-        playedTime.put(game, 0);
+        playedTimeGame.put(game, 0);
     }
 
-    /** игрок играет в игру game на протяжении hours часов
-    об этом нужно сообщить объекту-каталогу игр, откуда была установлена игра
-    также надо обновить значения в мапе игрока, добавив проигранное количество часов
-    возвращает суммарное количество часов, проигранное в эту игру.
-    если игра не была установлена, то надо выкидывать RuntimeException */
+    /**
+     * игрок играет в игру game на протяжении hours часов
+     * об этом нужно сообщить объекту-каталогу игр, откуда была установлена игра
+     * также надо обновить значения в мапе игрока, добавив проигранное количество часов
+     * возвращает суммарное количество часов, проигранное в эту игру.
+     * если игра не была установлена, то надо выкидывать RuntimeException
+     */
     public int play(Game game, int hours) {
-        game.getStore().addPlayTime(name, hours);
-        if (playedTime.containsKey(game)) {
-            playedTime.put(game, playedTime.get(game));
-        } else {
-            playedTime.put(game, hours);
+        if (playedTimeGame.get(game) == null) {
+            throw new NotInstallGameException("This " + game + " wasn't install");
         }
-        return playedTime.get(game);
+        game.getStore().addPlayTime(name, hours);
+        if (playedTimeGame.containsKey(game)) {
+            playedTimeGame.put(game, playedTimeGame.get(game) + hours);
+        } else {
+            playedTimeGame.put(game, hours);
+        }
+        return playedTimeGame.get(game);
     }
 
-    /** Метод принимает жанр игры (одно из полей объекта игры) и
-     суммирует время, проигранное во все игры этого жанра этим игроком */
+    /**
+     * Метод принимает жанр игры (одно из полей объекта игры) и
+     * суммирует время, проигранное во все игры этого жанра этим игроком
+     */
     public int sumGenre(String genre) {
         int sum = 0;
-        for (Game game : playedTime.keySet()) {
+        for (Game game : playedTimeGame.keySet()) {
             if (game.getGenre().equals(genre)) {
-                sum += playedTime.get(game);
-            } else {
-                sum = 0;
+                sum += playedTimeGame.get(game);
             }
         }
         return sum;
     }
 
-    /** Метод принимает жанр и возвращает игру этого жанра, в которую играли больше всего
-     Если в игры этого жанра не играли, возвращается null */
+    /**
+     * Метод принимает жанр и возвращает игру этого жанра, в которую играли больше всего
+     * Если в игры этого жанра не играли, возвращается null
+     */
     public Game mostPlayerByGenre(String genre) {
-        return null;
+        int mostTime = 1;
+        Game bestGame = null;
+        for (Game game : playedTimeGame.keySet()) {
+            if (game.getGenre().equals(genre)) {
+                int gameTime = playedTimeGame.get(game);
+                if (gameTime > mostTime) {
+                    mostTime = gameTime;
+                    bestGame = game;
+                }
+            }
+        }
+        return bestGame;
     }
 }
