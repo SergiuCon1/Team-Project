@@ -26,7 +26,7 @@ public class Player {
      * если игра уже была, никаких изменений происходить не должно
      */
     public void installGame(Game game) {
-        playedTime.put(game, 0);
+        playedTimeGame.put(game, 0);
     }
 
     /**
@@ -38,12 +38,12 @@ public class Player {
      */
     public int play(Game game, int hours) {
         game.getStore().addPlayTime(name, hours);
-        if (playedTime.containsKey(game)) {
-            playedTime.put(game, playedTime.get(game) + hours);
+        if (playedTimeGame.containsKey(game)) {
+            playedTimeGame.put(game, playedTimeGame.get(game) + hours);
         } else {
-            playedTime.put(game, hours);
+            playedTimeGame.put(game, hours);
         }
-        return playedTime.get(game);
+        return playedTimeGame.get(game);
     }
 
     /**
@@ -52,9 +52,9 @@ public class Player {
      */
     public int sumGenre(String genre) {
         int sum = 0;
-        for (Game game : playedTime.keySet()) {
+        for (Game game : playedTimeGame.keySet()) {
             if (game.getGenre().equals(genre)) {
-                sum += playedTime.get(game);
+                sum += playedTimeGame.get(game);
             }
         }
         return sum;
@@ -67,9 +67,9 @@ public class Player {
     public Game mostPlayerByGenre(String genre) {
         int mostTime = 1;
         Game bestGame = null;
-        for (Game game : playedTime.keySet()) {
+        for (Game game : playedTimeGame.keySet()) {
             if (game.getGenre().equals(genre)) {
-                int gameTime = playedTime.get(game);
+                int gameTime = playedTimeGame.get(game);
                 if (gameTime > mostTime) {
                     mostTime = gameTime;
                     bestGame = game;
