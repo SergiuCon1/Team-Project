@@ -13,7 +13,7 @@ public class GameStore {
      * Ключ - имя игрока
      * Значение - суммарное количество часов в игры этого каталога
      */
-    private Map<String, Integer> playedTime = new HashMap<>();
+    private Map<String, Integer> playedTimePlayer = new HashMap<>();
 
     /**
      * Создание объекта игры с заданными заголовком и жанром
@@ -40,10 +40,10 @@ public class GameStore {
      * суммироваться с прошлым значением для этого игрока
      */
     public void addPlayTime(String playerName, int hours) {
-        if (playedTime.containsKey(playerName)) {
-            playedTime.put(playerName, playedTime.get(playerName) + hours);
+        if (playedTimePlayer.containsKey(playerName)) {
+            playedTimePlayer.put(playerName, playedTimePlayer.get(playerName) + hours);
         } else {
-            playedTime.put(playerName, hours);
+            playedTimePlayer.put(playerName, hours);
         }
     }
 
@@ -54,8 +54,8 @@ public class GameStore {
     public String getMostPlayer() {
         int mostTime = 1;
         String bestPlayer = null;
-        for (String playerName : playedTime.keySet()) {
-            int playerTime = playedTime.get(playerName);
+        for (String playerName : playedTimePlayer.keySet()) {
+            int playerTime = playedTimePlayer.get(playerName);
             if (playerTime > mostTime) {
                 mostTime = playerTime;
                 bestPlayer = playerName;
@@ -69,6 +69,11 @@ public class GameStore {
      * за играми этого каталога
      */
     public int getSumPlayedTime() {
-        return 0;
+        int sumTime = 0;
+        for (String playerName : playedTimePlayer.keySet()) {
+            int playerTime = playedTimePlayer.get(playerName) + sumTime;
+            sumTime = playerTime;
+        }
+        return sumTime;
     }
 }
